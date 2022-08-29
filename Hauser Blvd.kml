@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Hauser Blvd</name>
+    <Style id="icon-1899-DB4436-nodesc-normal">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1899-DB4436-nodesc-highlight">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1899-DB4436-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-DB4436-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-DB4436-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-1267FF-5000-nodesc-normal">
+      <LineStyle>
+        <color>ffff6712</color>
+        <width>5</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-1267FF-5000-nodesc-highlight">
+      <LineStyle>
+        <color>ffff6712</color>
+        <width>7.5</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-1267FF-5000-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-1267FF-5000-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-1267FF-5000-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>Hauser Blvd</name>
+      <styleUrl>#line-1267FF-5000-nodesc</styleUrl>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          -118.35687,34.04875,0
+          -118.35691,34.04866,0
+          -118.35708,34.0482,0
+          -118.3571,34.04816,0
+          -118.35713,34.04806,0
+          -118.35717,34.04797,0
+          -118.35726,34.04772,0
+          -118.35735,34.04745,0
+          -118.35745,34.04717,0
+          -118.35754,34.04693,0
+          -118.35761,34.04675,0
+          -118.35769,34.04654,0
+          -118.35777,34.04632,0
+          -118.35792,34.04593,0
+          -118.35817,34.04525,0
+          -118.35831,34.04485,0
+          -118.35834,34.04476,0
+          -118.35844,34.04451,0
+          -118.35858,34.04413,0
+          -118.35864,34.04398,0
+          -118.35876,34.04363,0
+          -118.35885,34.04336,0
+          -118.35947,34.04167,0
+          -118.35981,34.04077,0
+          -118.35987,34.04059,0
+          -118.36013,34.03989,0
+          -118.36026,34.0395,0
+          -118.36036,34.0391,0
+          -118.36009,34.03924,0
+          -118.36005,34.03912,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Hauser Boulevard & West Pico Boulevard, Los Angeles, CA, USA]]></name>
+      <styleUrl>#icon-1899-DB4436-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -118.3568669,34.0487467,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Washington / Hauser, Los Angeles, CA, USA</name>
+      <styleUrl>#icon-1899-DB4436-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -118.3600497,34.0391245,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>
