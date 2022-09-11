@@ -1,6 +1,6 @@
 from threading import local
 from maps_directions import queryToPath,buildQuery_direct
-from routes_db import route_getter,getDestinationm,getOrigin
+from routes_db import routeDB_gsheet,getDestinationm,getOrigin
 from kml_tools import routes_to_kml
 import json
 
@@ -17,7 +17,7 @@ def route_mapper(mapfileName,
     # collect data from route database, filtering if requested. 
     # filters must be equal to the label row text in the database.
     
-    routeData_remote:dict[dict[any]] = route_getter()
+    routeData_remote:dict[dict[any]] = routeDB_gsheet()
     #attempt to get the pre-run database, if it exists
     routeData_saved = None
     addRoutes:bool = False
