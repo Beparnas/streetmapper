@@ -1,8 +1,9 @@
-
-
+from cgitb import handler
+from GC_util import GC_util
 class routeDB:
     count:int
     data:dict[str,dict[str:any]]
+    cred_handler:GC_util
     def __init__(self,
                 db_type:str = "google sheet",
                 filteritems:dict[str,list[any]] = None,
@@ -10,38 +11,34 @@ class routeDB:
         self.db:dict[str,any] = {}
         
         if db_type == "google sheet":
-            try:
-                print("Authenticating and connecting to Google Database...")
-                self.loadDB_gsheet(sheetName,filteritems)
+            self.cred_handler = None
+            try:                    
+                if 'cred_handler' not in connectionParams:      
+                    self.cred_handler = GC_util()
+                else:
+                    self.cred_handler = connectionParams['cred_handler']
+                print("Connecting to Google Database...")
+                self.loadDB_gsheet( connectionParams['sheetID'],
+                                    filteritems)
             except NameError:
                 print("google sheet: spreadsheet name required!")
-    def loadDB_gsheet(filteritems):
-        #mostly from https://developers.google.com/sheets/api/quickstart/python
-        from __future__ import print_function
-
-        import glob
-        from google.auth.transport.requests import Request
-        from google.oauth2.credentials import Credentials
-        from google_auth_oauthlib.flow import InstalledAppFlow
+        routes = dict(zip(names,data))
+        return routes 
+    def loadDB_gsheet(self,sheetID,filteritems):
         from googleapiclient.discovery import build
+        from googleapiclient.discovery import Resource
         from googleapiclient.errors import HttpError
-
-        SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-
-        #authenticate with google and connect to database spreadsheet
-        #do we have credentials?
-        keys = glob.glob("client_secret_*.json")
-        if len(keys) == 0:
-            print("no api key! deal with this somehow")
-            raise RuntimeError("DB: gsheet: no key")
-        elif len(keys) > 1:
-            print("multiple api keys! deal with this somehow")
-            raise RuntimeError("DB: gsheet: too many keys")
-        creds = Credentials.from_authorized_user_file(keys[0])
-        if not creds or not creds.valid:
-            
-    routes = dict(zip(names,data))
-    return routes 
+        if self.cred_handler is not None:
+            try:
+                service:Resource = build("sheets","v4",credentials=self.cred_handler.creds)
+                # sheet_data = service.spreadsheets().get(spreadsheetId=sheetID).execute()
+                # sheetsList = sheet_data.get("sheets","")
+                sheet = service.spreadsheets()
+                result = sheet.values().get(spreadsheetId=sheetID,range="Main!A1:Z").execute()
+            except HttpError as err:
+                print(err)
+        self.data = result
+        return
 def getOrigin(route,clarifyingSuffix:str):
     street:str
     cross:str

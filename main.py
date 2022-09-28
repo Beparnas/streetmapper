@@ -1,6 +1,7 @@
-from threading import local
+
 from maps_directions import queryToPath,buildQuery_direct
-from routes_db import routeDB_gsheet,getDestinationm,getOrigin
+from routes_db import routeDB
+from GC_util import GC_util
 from kml_tools import routes_to_kml
 import json
 
@@ -10,14 +11,26 @@ path_key = "path"
 #constants
 query_cost = 0.10
 
-def route_mapper(mapfileName,
+def main(filterData = None):
+    #get google credentials
+    cred_handler = GC_util()
+    #TODO: handle filters
+    #TODO: set file name
+    #run route mapper
+    route_mapper(cred_handler)
+
+def route_mapper(cred_handler,
                  filterData:dict[str,list[any]] = None,
-                 dbPath:str = 'streetmapper_db.json'
+                 dbPath:str = 'streetmapper_db.json',
                 ):
+    
+    #TODO: handle .csv Database
+    print("collecting from database...")
     # collect data from route database, filtering if requested. 
     # filters must be equal to the label row text in the database.
-    
-    routeData_remote:dict[dict[any]] = routeDB_gsheet()
+    db = routeDB(   sheetID="1AtQY7oARVJT0JUjudXbc8jFvdIySWZUbK1LTWyAmIfY",
+                    cred_handler=cred_handler)
+    routeData_remote:dict[dict[any]] = db.data
     #attempt to get the pre-run database, if it exists
     routeData_saved = None
     addRoutes:bool = False
@@ -46,8 +59,8 @@ def route_mapper(mapfileName,
         elif addRoutes:    
             
             #get a point array of the route from google maps directions API
-            routeQuery = buildQuery_direct( getOrigin(route,", Los Angeles CA"),
-                                        getDestinationm(route,", Los Angeles CA"),
+            routeQuery = buildQuery_direct( db.getOrigin(route,", Los Angeles CA"),
+                                        db.getDestinationm(route,", Los Angeles CA"),
                                         "DRIVING")
             #get query from google maps API
             # https://github.com/googlemaps/google-maps-services-python
@@ -62,4 +75,6 @@ def route_mapper(mapfileName,
         #save route to the local database
     #build a kml file from the local route database 
     # overwrite database
-    
+
+if __name__ == "__main__":
+    main()

@@ -1,1 +1,4 @@
 SFA_Streetmapper/*
+client_secret*.json
+token.json
+__pycache__/*

@@ -13,3 +13,4 @@ def queryToPath(routeName,query):
 def buildQuery_direct(origin,destination,travelMode):
     #build up a maps API query 
     #optimized for a direct path 
+    pass
