@@ -6,7 +6,7 @@ from kml_tools import routes_to_kml
 import json
 
 #database keys 
-path_key = "path"
+path_key = "auto-generated google maps link"
 
 #constants
 query_cost = 0.10
@@ -17,9 +17,10 @@ def main(filterData = None):
     #TODO: handle filters
     #TODO: set file name
     #run route mapper
-    route_mapper(cred_handler)
+    route_mapper(cred_handler,path_key)
 
 def route_mapper(cred_handler,
+                 path_key,
                  filterData:dict[str,list[any]] = None,
                  dbPath:str = 'streetmapper_db.json',
                 ):
@@ -28,7 +29,8 @@ def route_mapper(cred_handler,
     print("collecting from database...")
     # collect data from route database, filtering if requested. 
     # filters must be equal to the label row text in the database.
-    db = routeDB(   sheetID="1AtQY7oARVJT0JUjudXbc8jFvdIySWZUbK1LTWyAmIfY",
+    db = routeDB(   path_key,
+                    sheetID="1AtQY7oARVJT0JUjudXbc8jFvdIySWZUbK1LTWyAmIfY",
                     cred_handler=cred_handler)
     routeData_remote:dict[dict[any]] = db.data
     #attempt to get the pre-run database, if it exists
