@@ -33,6 +33,8 @@ def route_mapper(cred_handler,
                     sheetID="1AtQY7oARVJT0JUjudXbc8jFvdIySWZUbK1LTWyAmIfY",
                     cred_handler=cred_handler)
     routeData_remote:dict[dict[any]] = db.data
+    #TODO: print info if filtered
+    print("got {} route(s)".format(db.count))
     #attempt to get the pre-run database, if it exists
     routeData_saved = None
     addRoutes:bool = False
