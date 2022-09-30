@@ -1,4 +1,5 @@
 SFA_Streetmapper/*
 client_secret*.json
 token.json
+keys.json
 __pycache__/*
