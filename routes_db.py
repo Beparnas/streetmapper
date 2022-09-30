@@ -29,7 +29,7 @@ class routeDB:
         else:
             raise RuntimeError("only google sheet supported currently")
 
-            
+
         self.buildDB(prim_key,raw_db)
     
     def buildDB(self,prim_key,raw_data):
@@ -65,7 +65,9 @@ class routeDB:
             self.count+=1
 
         self.data = dict(zip(keys,data))
-
+    
+    def flattenDB(skippedFields = []):
+        pass
     def loadDB_gsheet(self,sheetID,filteritems):
         from googleapiclient.discovery import build
         from googleapiclient.discovery import Resource
@@ -86,6 +88,8 @@ class routeDB:
             except HttpError as err:
                 print(err)
         return result
+    def updateDB_gsheet(self,sheetID):
+        pass
     def getOrigin(self,route,clarifyingSuffix:str):
         street:str = self.data[route]["Street"]
         cross:str = self.data[route]["From"]

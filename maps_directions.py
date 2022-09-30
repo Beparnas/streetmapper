@@ -13,6 +13,8 @@ class MapsAsker():
         #load api key from file
         key:str
         service:str = "googleMaps"
+        self.queries = []
+        self.querycount = 0
         try:
             with open("keys.json","r") as f:
                 key = json.load(f)[service]
@@ -34,7 +36,11 @@ class MapsAsker():
     def encodePath(self,points:list[tuple]):
         return encode_polyline(points=points)
     def decodePath(self,path_encoded):
-        return decode_polyline(path_encoded)
+        raw_decode = decode_polyline(path_encoded)
+        decode:list = []
+        for point in raw_decode:
+            decode.append((point['lng'],point['lat']))
+        return decode
     def queryToPath(self,qFrom,qTo,dt=None):
         dirObj = self.queryToDirections(qFrom,qTo,dt)
         #save the query

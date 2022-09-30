@@ -2,6 +2,7 @@
 from maps_directions import MapsAsker
 from routes_db import routeDB
 from GC_util import GC_util
+from streetmapper_utils import *
 from kml_tools import routes_to_kml
 import json
 
@@ -65,10 +66,12 @@ def route_mapper(cred_handler,
             print("queried {}".format(route))
         else:
             print("skipped {}".format(route))
-        # expand out the path and store it 
-        db.data[route][]
+        # expand out theY path and store it 
+        db.data[route][pathData_key] = map_asker.decodePath(db.data[route][path_key])
     #build a kml file from the local route database 
-    # overwrite database
+    file = routes_to_kml(list(db.data.keys()),db)
+    print("done! routes saved to {}.kml".format(file) )
+    #TODO:overwrite database
 
 if __name__ == "__main__":
     main()
