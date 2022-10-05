@@ -68,9 +68,11 @@ def route_mapper(cred_handler,
             print("skipped {}".format(route))
         # expand out theY path and store it 
         db.data[route][pathData_key] = map_asker.decodePath(db.data[route][path_key])
+    print("updating database for queried items...",end="")
+    
     #build a kml file from the local route database 
     file = routes_to_kml(list(db.data.keys()),db)
-    print("done! routes saved to {}.kml".format(file) )
+    print("done! routes saved to {}".format(file) )
     #TODO:overwrite database
 
 if __name__ == "__main__":
