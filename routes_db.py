@@ -7,6 +7,8 @@ from GC_util import GC_util
 from googleapiclient.discovery import build
 from googleapiclient.discovery import Resource
 from googleapiclient.errors import HttpError
+
+# https://developers.google.com/sheets/api/quickstart/python
 class routeDB:
     count:int
     data:dict[str,dict[str:any]]
