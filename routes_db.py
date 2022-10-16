@@ -3,6 +3,7 @@ from copy import deepcopy
 import copy
 from math import exp
 from GC_util import GC_util
+from A1fromRC import A1fromRC
 
 from googleapiclient.discovery import build
 from googleapiclient.discovery import Resource
@@ -13,6 +14,10 @@ class routeDB:
     count:int
     data:dict[str,dict[str:any]]
     cred_handler:GC_util
+    sheetName:str
+    service: Resource #Google Sheets resource, used to access remote data
+    count:int # number of entries
+    rawFields:list[str] #the fields of the remote database, in order
     def __init__(self,
                 prim_key:str,
                 db_type:str = "google sheet",
@@ -35,6 +40,7 @@ class routeDB:
                 else:
                     self.cred_handler = connectionParams['cred_handler']
                 print("Connecting to Google Database...")
+                self.sheet = self.service.spreadsheets()
                 raw_db = self.loadDB_gsheet(self.sheet_ID,
                                             filteritems)['values']
             except NameError:
@@ -46,6 +52,16 @@ class routeDB:
         self.buildDB(prim_key,raw_db)
     
     def buildDB(self,prim_key,raw_data):
+        """!
+        Creates the structured database, based on the primary key
+        and a 2D array of the dataset
+
+        adds fields:
+        - row number: the row within the db that the entry existed in
+        @param prim_key string of the primary key - must be a header in the DB
+        @param raw_data: list of lists, representing [R:[C:""]] data in the DB
+        @return true if successful, exceptions otherwise
+        """
         #confirm primary key exists
         p_idx = 0 
         if prim_key not in raw_data[0]:
@@ -83,6 +99,7 @@ class routeDB:
             self.count+=1
 
         self.data = dict(zip(keys,data))
+        return True
     
    
     def loadDB_gsheet(self,filteritems):
@@ -90,16 +107,40 @@ class routeDB:
         if self.cred_handler is not None:
             try:
 
-                sheet = self.service.spreadsheets()
-                result = sheet.values().get(spreadsheetId=self.sheetID,
+                
+                result = self.sheet.values().get(spreadsheetId=self.sheetID,
                                             range=self.sheetName+"!A1:Z",
                                             majorDimension="ROWS")\
                                         .execute()
             except HttpError as err:
                 print(err)
         return result
-    def updatefield(self,routes,field):
-        pass
+    
+    def updatefield_gsheet(self,routes:str|list[str],field):
+        """!
+        connect to the database, identify the routes to modifiy, and update the given field
+        @param routes list of routes to update
+        @param filed the field to change - identify it via self.rawFields
+        @return True if successful, exceptions otherwise
+        """
+        if type(routes) == str:
+            routes = [routes]
+        if field not in self.rawFields:
+            raise RuntimeError("requested field {} not in database!".format(field))
+        for route in routes:
+            cellStr =self.sheetName+"!"+A1fromRC(self.data[route]["row number"]+1,self.rawFields.index(field)+1)
+            updateBody = {
+                "range": cellStr,
+                "majorDimension": "ROWS",
+                "values": [[route[field]]]     
+            }
+            updateData:dict[any] =  self.sheet.values()\
+                                    .update(spreasheetId = self.sheet_ID,
+                                            range=cellStr,
+                                            valueInputOption="RAW",
+                                            body=updateBody
+                                    )
+        
         
     def getOrigin(self,route,clarifyingSuffix:str):
         street:str = self.data[route]["Street"]
@@ -118,26 +159,3 @@ def getAddrFromCrossSts(street,cross,suffix=None):
     AddrStr:str = street + " & " + cross + suffix
 
     return AddrStr
-def A1fromRC(r,c,r_end = None,c_end = None):
-    start:str
-    end:str
-    iterable:list = [c]
-    if r_end is not None and c_end is not None:
-        iterable.append(c_end)
-    for c in iterable:    
-        result:str = ''
-        while c > 0:
-            
-            n = 1
-            #find the highest letter needed
-            while c // pow(26,n) > 0:
-                n +=1
-            if n >1:
-                partial = c // pow(26,n-1)+1
-            else:
-                partial = c // pow(26,n-1)
-
-            result += chr(ord("@")+partial)
-            c -= partial*pow(26,n-1)
-        result += str(r)
-    return result
